@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<h2>XXXX Index.html from Blueprint {{ request.blueprint }}</h2>
+
+<img src={{ url_for('.static', filename='sample.jpg') }} height=25%, width=25%>
+
+<module-outlet></module-outlet>
+
+{% if config['TESTING'] %}
+<!--
+    During testing, python source code is pulled directly from the server for each
+    import. When not testing, python code is packed in auto_vfs.js files which act
+    as a virtual file system from which the code is pulled.
+
+    Below are the links for the non-testing phase
+  -->
+{% else %}
+<script
+  src={{ url_for(
+             'static',
+             filename=config['FLASKPYLAR_APPS'] + '/' + request.blueprint + '.auto_vfs.js')
+  }}
+></script>
+
+<script
+  src={{ url_for(
+             'static',
+             filename=config['FLASKPYLAR_APPS'] + '/' + config['FLASKPYLAR_LIBS'] + '.auto_vfs.js'
+         )
+  }}
+></script>
+
+{% endif %}
+
+{% if config['TESTING'] %}
+<!--
+    During testing an unoptimized version of anpylar is used, which is not the
+    one that will be packed and optimized in the static directory. Using '.bpstatic'
+    allows the blueprints (bp) to receive the request and deliver the file.
+
+    It is testing, performance of static delivery is not considered.
+
+    During non-testing, the file is served directly from "static" (which will be
+    served by the real web-server directly or via SEND-X-FILE
+-->
+<script async src={{ url_for('.bpstatic', filename='anpylar.js') }}></script>
+{% else %}
+<script async src={{ url_for('static', filename='anpylar.js') }}></script>
+{% endif %}
+
+{% endblock %}
