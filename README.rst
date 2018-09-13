@@ -174,7 +174,7 @@ Everything is under the ``dev`` directory::
   ... ... ...
 
 As shown, each mini-application can have its own set of ``static`` files and
-``templates`` if needed be (the sample shows how the ``routers`` mini-app uses
+``templates`` if needed be (the sample shows how the ``pyroes`` mini-app uses
 this facility)
 
 Managing
